@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Dashboard</h2>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Products</h5>
+                    <p class="card-text">{{ total_products }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Suppliers</h5>
+                    <p class="card-text">{{ total_suppliers }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Transactions</h5>
+                    <p class="card-text">{{ total_transactions }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-danger mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Quantity</h5>
+                    <p class="card-text">{{ total_quantity }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <h4>Product Quantities</h4>
+            <canvas id="productChart"></canvas>
+        </div>
+        <div class="col-md-6">
+            <h4>Transactions Over Time</h4>
+            <canvas id="transactionChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var productCtx = document.getElementById('productChart').getContext('2d');
+    var productChart = new Chart(productCtx, {
+        type: 'bar',
+        data: {
+            labels: {{ product_names|safe }},
+            datasets: [{
+                label: 'Quantities',
+                data: {{ product_quantities|safe }},
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    var transactionCtx = document.getElementById('transactionChart').getContext('2d');
+    var transactionChart = new Chart(transactionCtx, {
+        type: 'line',
+        data: {
+            labels: {{ transaction_dates|safe }},
+            datasets: [{
+                label: 'Quantities',
+                data: {{ transaction_quantities|safe }},
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

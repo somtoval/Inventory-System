@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}{{ form_title }}{% endblock %}
+{% block content %}
+<h2>{{ form_title }}</h2>
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="product">Product</label>
+        <select class="form-control" id="product" name="product">
+            <option>--Select Product--</option>
+            {% for product in form.fields.product.queryset %}
+            <option value="{{ product.id }}" {% if product.id == form.product.value %}selected{% endif %}>{{ product.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="quantity">Quantity</label>
+        <input type="number" class="form-control" id="quantity" name="quantity" value="{{ form.quantity.value|default_if_none:'' }}">
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+{% endblock %}
